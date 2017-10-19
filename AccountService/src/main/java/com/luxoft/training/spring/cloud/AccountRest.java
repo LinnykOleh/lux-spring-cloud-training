@@ -31,8 +31,8 @@ public class AccountRest {
     }
 
     @RequestMapping("/checkout/{id}")
-    public void checkout(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
-        accountDAO.addBalance(id, sum.abs().negate());
+    public boolean checkout(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
+        return accountDAO.addBalance(id, sum.abs().negate());
     }
 
     @RequestMapping("/get")
