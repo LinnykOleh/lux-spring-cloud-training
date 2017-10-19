@@ -26,8 +26,8 @@ public class AccountRest {
     }
 
     @RequestMapping("/fund/{id}")
-    public void fund(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
-        accountDAO.addBalance(id, sum.abs());
+    public boolean fund(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
+        return accountDAO.addBalance(id, sum.abs());
     }
 
     @RequestMapping("/checkout/{id}")
@@ -35,7 +35,7 @@ public class AccountRest {
         return accountDAO.addBalance(id, sum.abs().negate());
     }
 
-    @RequestMapping("/get")
+    @RequestMapping("/get/{clientId}")
     public List<AccountEntity> get(@PathVariable("clientId") Integer clientId) {
         return accountRepository.findByClientId(clientId);
     }

@@ -27,7 +27,8 @@ public class ProcessingRest {
         ProcessingEntity processingEntity = new ProcessingEntity();
         processingEntity.setAccountId(accountId);
         processingEntity.setCard(generatedCardNumber);
-        processingRepository.save(processingEntity);
+        ProcessingEntity savedEntity = processingRepository.save(processingEntity);
+        accountServiceClient.create(savedEntity.getId());
     }
 
     @RequestMapping("/checkout/{card}")
@@ -35,6 +36,13 @@ public class ProcessingRest {
         ProcessingEntity processingEntity = processingRepository.findByCard(card);
         if (processingEntity == null) return false;
         return accountServiceClient.checkout(processingEntity.getId(), sum);
+    }
+
+    @RequestMapping("/fund/{card}")
+    public boolean fund(@RequestParam("sum") BigDecimal sum, @PathVariable("card") String card) {
+        ProcessingEntity processingEntity = processingRepository.findByCard(card);
+        if (processingEntity == null) return false;
+        return accountServiceClient.fund(processingEntity.getId(), sum);
     }
 
     @RequestMapping("/get")

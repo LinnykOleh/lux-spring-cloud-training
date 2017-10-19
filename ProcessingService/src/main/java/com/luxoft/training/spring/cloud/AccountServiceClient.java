@@ -10,5 +10,11 @@ import java.math.BigDecimal;
 @FeignClient("AccountService")
 public interface AccountServiceClient {
     @RequestMapping("/checkout/{id}")
-    boolean checkout(@PathVariable("id") Integer parentId, @RequestParam("sum")BigDecimal sum);
+    boolean checkout(@PathVariable("id") Integer parentId, @RequestParam("sum") BigDecimal sum);
+
+    @RequestMapping("/fund/{id}")
+    boolean fund(@PathVariable("id") Integer parentId, @RequestParam("sum") BigDecimal sum);
+
+    @RequestMapping("/create")
+    void create(@RequestParam("id") Integer id);
 }
