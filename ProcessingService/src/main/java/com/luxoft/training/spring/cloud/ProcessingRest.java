@@ -22,13 +22,17 @@ public class ProcessingRest {
     }
 
     @RequestMapping("/issue/{accountId}")
-    public void issue(@PathVariable("accountId") Integer accountId) {
+    public String issue(@PathVariable("accountId") Integer accountId) {
         String generatedCardNumber = cardServiceClient.create();
+        if (generatedCardNumber == null) {
+            return "CARD_SERVICE_NOT_AVAILABLE";
+        }
         ProcessingEntity processingEntity = new ProcessingEntity();
         processingEntity.setAccountId(accountId);
         processingEntity.setCard(generatedCardNumber);
         ProcessingEntity savedEntity = processingRepository.save(processingEntity);
         accountServiceClient.create(savedEntity.getId());
+        return generatedCardNumber;
     }
 
     @RequestMapping("/checkout/{card}")
