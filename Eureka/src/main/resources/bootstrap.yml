@@ -1,10 +1,5 @@
-spring:
-  application:
-    name: Eureka
+spring.application.name: Eureka
 
-server:
-  port: 8761
-
-eureka.client:
-  fetchRegistry: false
-  registerWithEureka: false
+spring.cloud.config:
+  failFast: true
+  uri: http://localhost:8600

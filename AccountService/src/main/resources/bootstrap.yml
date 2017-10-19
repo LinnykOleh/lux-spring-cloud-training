@@ -1,13 +1,7 @@
-spring:
-  application:
-    name: AccountService
+spring.application.name: AccountService
 
-server:
-  port: 8802
+server.port: 8802
 
-eureka:
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8701/eureka,http://localhost:8702/eureka
+spring.cloud.config:
+  failFast: true
+  uri: http://localhost:8600
