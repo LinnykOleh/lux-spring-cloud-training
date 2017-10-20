@@ -1,0 +1,5 @@
+spring.application.name: AuthService
+
+spring.cloud.config:
+  failFast: true
+  uri: http://localhost:8600
