@@ -1,7 +1,5 @@
 spring.application.name: AccountService
 
-server.port: 8802
-
 spring.cloud.config:
   failFast: true
   uri: http://localhost:8600

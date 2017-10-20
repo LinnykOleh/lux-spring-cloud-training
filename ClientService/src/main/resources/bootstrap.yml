@@ -1,7 +1,5 @@
 spring.application.name: ClientService
 
-server.port: 8801
-
 spring.cloud.config:
   failFast: true
   uri: http://localhost:8600
