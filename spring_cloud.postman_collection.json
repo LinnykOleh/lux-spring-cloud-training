@@ -1,0 +1,322 @@
+{
+	"variables": [],
+	"info": {
+		"name": "spring_cloud",
+		"_postman_id": "cb7675fe-e353-eff5-9ab5-0a20375aaa08",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Issue card",
+			"request": {
+				"url": "http://localhost:8804/issue/0",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get by account id",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8804/get?ids=0,1,2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8804",
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "0,1,2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "checkout",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8804/checkout/88400591264135020?sum=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8804",
+					"path": [
+						"checkout",
+						"88400591264135020"
+					],
+					"query": [
+						{
+							"key": "sum",
+							"value": "10",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get by client id",
+			"request": {
+				"url": "http://localhost:8802/get/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "issue card via gateway",
+			"request": {
+				"url": "http://localhost:8700/processing/issue/0",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ProcessingService configs",
+			"request": {
+				"url": "http://localhost:8600/ProcessingService/default",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Eurika08701 configs",
+			"request": {
+				"url": "http://localhost:8600/Eureka/8701",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Processing Service test fallback",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8804/test?fail=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8804",
+					"path": [
+						"test"
+					],
+					"query": [
+						{
+							"key": "fail",
+							"value": "1",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "generate token",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8500/uaa/oauth/token?grant_type=password&username=account&password=account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8500",
+					"path": [
+						"uaa",
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "username",
+							"value": "account",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "account",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Y2xpZW50OnNlY3JldA==",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get via gateway",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8700/processing/get?ids=0,1,2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8700",
+					"path": [
+						"processing",
+						"get"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "0,1,2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get client via gateway",
+			"request": {
+				"url": "http://localhost:8700/client/get/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "fund via gateway",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8700/processing/fund/44495548069425920?sum=13",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8700",
+					"path": [
+						"processing",
+						"fund",
+						"44495548069425920"
+					],
+					"query": [
+						{
+							"key": "sum",
+							"value": "13",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "publish word",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8001/publish?word=world",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"publish"
+					],
+					"query": [
+						{
+							"key": "word",
+							"value": "world",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "consume word stats",
+			"request": {
+				"url": "http://localhost:8002",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
