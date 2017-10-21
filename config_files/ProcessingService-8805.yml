@@ -1,0 +1,3 @@
+server.port: 8805
+
+feign.hystrix.enabled: true

@@ -1,0 +1,23 @@
+eureka.client.registerWithEureka: false
+
+server.port: 8700
+management:
+  port: 9700
+  security:
+    enabled: false
+
+zuul:
+ ignoredServices: '*'
+ routes:
+  clients:
+    path: /client/**
+    serviceId: ClientService
+    stripPrefix: true
+  accounts:
+    path: /account/**
+    serviceId: AccountService
+    stripPrefix: true
+  card-processing:
+    path: /processing/**
+    serviceId: ProcessingService
+    stripPrefix: true

@@ -1,0 +1,9 @@
+eureka.client.registerWithEureka: false
+
+server.port: 8900
+
+turbine: 
+  aggregator:
+    clusterConfig: PROCESSINGSERVICE
+  appConfig: ProcessingService
+  
