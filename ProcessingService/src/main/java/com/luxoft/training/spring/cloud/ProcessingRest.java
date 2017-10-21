@@ -1,8 +1,7 @@
 package com.luxoft.training.spring.cloud;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.ribbon.proxy.annotation.Hystrix;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
+@PreAuthorize("hasAuthority('PROCESSING')")
 @RestController
 public class ProcessingRest {
     private final ProcessingRepository processingRepository;

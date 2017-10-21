@@ -1,6 +1,7 @@
 package com.luxoft.training.spring.cloud;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +14,7 @@ public class CardRest {
         this.cardNumberGenerator = cardNumberGenerator;
     }
 
+    @PreAuthorize("hasAnyAuthority('CARD_WRITE')")
     @RequestMapping("/create")
     public String create() {
         return cardNumberGenerator.generate();
