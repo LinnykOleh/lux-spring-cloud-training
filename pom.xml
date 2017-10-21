@@ -32,6 +32,9 @@
     </dependencyManagement>
 
     <modules>
+        <module>Processor</module>
+        <module>Aggregator</module>
+        <module>WordNumSplitter</module>
         <module>Common</module>
         <module>Subscriber</module>
         <module>Publisher</module>

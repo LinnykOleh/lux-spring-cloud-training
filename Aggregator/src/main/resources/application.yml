@@ -2,5 +2,5 @@ spring:
   application:
     name: Aggregator
 server:
-  port: 8004
+  port: 8005
 
