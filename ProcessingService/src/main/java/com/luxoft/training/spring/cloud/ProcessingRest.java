@@ -1,6 +1,7 @@
 package com.luxoft.training.spring.cloud;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,66 +11,62 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @PreAuthorize("hasAuthority('PROCESSING')")
 @RestController
 public class ProcessingRest {
-    private final ProcessingRepository processingRepository;
-    private final AccountServiceClient accountServiceClient;
-    private final CardServiceClient cardServiceClient;
+    @Autowired
+    private ProcessingRepository repo;
 
-    public ProcessingRest(ProcessingRepository processingRepository, AccountServiceClient accountServiceClient, CardServiceClient cardServiceClient) {
-        this.processingRepository = processingRepository;
-        this.accountServiceClient = accountServiceClient;
-        this.cardServiceClient = cardServiceClient;
-    }
+    @Autowired
+    private AccountServiceClient accountServiceClient;
+
+    @Autowired
+    private CardServiceClient cardServiceClient;
 
     @RequestMapping("/issue/{accountId}")
-    public String issue(@PathVariable("accountId") Integer accountId) {
-        String generatedCardNumber = cardServiceClient.create();
-        if (generatedCardNumber == null) {
+    public String issueNewCard(@PathVariable Integer accountId) {
+        final String card = cardServiceClient.createCard();
+        if (card == null) {
             return "CARD_SERVICE_NOT_AVAILABLE";
         }
-        ProcessingEntity processingEntity = new ProcessingEntity();
-        processingEntity.setAccountId(accountId);
-        processingEntity.setCard(generatedCardNumber);
-        ProcessingEntity savedEntity = processingRepository.save(processingEntity);
-        accountServiceClient.create(savedEntity.getId());
-        return generatedCardNumber;
+        ProcessingEntity pe = new ProcessingEntity();
+        pe.setCard(card);
+        pe.setAccountId(accountId);
+        repo.save(pe);
+        return card;
     }
 
     @RequestMapping("/checkout/{card}")
-    public boolean checkout(@RequestParam("sum") BigDecimal sum, @PathVariable("card") String card) {
-        ProcessingEntity processingEntity = processingRepository.findByCard(card);
-        if (processingEntity == null) return false;
-        return accountServiceClient.checkout(processingEntity.getId(), sum);
-    }
-
-    @RequestMapping("/fund/{card}")
-    public boolean fund(@RequestParam("sum") BigDecimal sum, @PathVariable("card") String card) {
-        ProcessingEntity processingEntity = processingRepository.findByCard(card);
-        if (processingEntity == null) return false;
-        return accountServiceClient.fund(processingEntity.getId(), sum);
+    public boolean checkout(@PathVariable String card, @RequestParam BigDecimal sum) {
+        ProcessingEntity pe = repo.findByCard(card);
+        if (pe == null) {
+            return false;
+        }
+        return accountServiceClient.checkout(pe.getAccountId(), sum);
     }
 
     @RequestMapping("/get")
-    public HashMap<Integer, ProcessingEntity> get(@RequestParam("ids") List<Integer> accountIds) {
-        HashMap<Integer, ProcessingEntity> map = new HashMap<Integer, ProcessingEntity>();
-        List<ProcessingEntity> processingEntities = processingRepository.findByAccountIdIn(accountIds);
-        for (ProcessingEntity processingEntity : processingEntities) {
-            map.put(processingEntity.getId(), processingEntity);
+    public Map<Integer, String> getByAccount(@RequestParam("account_id") List<Integer> accountIdList) {
+        List<ProcessingEntity> list = repo.findByAccountIdIn(accountIdList);
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        for (ProcessingEntity pe: list) {
+            map.put(pe.getAccountId(), pe.getCard());
         }
         return map;
     }
 
+    @HystrixCommand(fallbackMethod = "testFallback")
     @RequestMapping("/test")
-    @HystrixCommand(fallbackMethod = "fallback")
-    public String test(@RequestParam("fail") Boolean fail) {
-        if (fail) throw new RuntimeException();
+    public String testHystrix(Boolean fail) {
+        if (Boolean.TRUE.equals(fail)) {
+            throw new RuntimeException();
+        }
         return "OK";
     }
 
-    private String fallback(Boolean fail) {
+    private String testFallback(Boolean fail) {
         return "FAILED";
     }
 }

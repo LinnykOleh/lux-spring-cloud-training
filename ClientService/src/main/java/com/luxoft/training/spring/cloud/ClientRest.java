@@ -21,13 +21,13 @@ public class ClientRest {
         this.clientRepository = clientRepository;
     }
 
-    @PreAuthorize("hasAnyAuthority('CLIENT_WRITE')")
+    @PreAuthorize("hasAuthority('CLIENT_WRITE')")
     @RequestMapping("/create")
     public ClientEntity create(@RequestParam("name") String name) {
         return clientDAO.create(name);
     }
 
-    @PreAuthorize("hasAnyAuthority('CLIENT_WRITE')")
+    @PreAuthorize("hasAuthority('CLIENT_WRITE')")
     @RequestMapping("/update/{id}")
     public ResponseEntity<Object> update(@RequestParam("name") String name, @PathVariable("id") Integer id) {
         boolean update = clientDAO.update(id, name);
@@ -37,19 +37,19 @@ public class ClientRest {
         return ResponseEntity.notFound().build();
     }
 
-    @PreAuthorize("hasAnyAuthority('CLIENT_WRITE')")
+    @PreAuthorize("hasAuthority('CLIENT_WRITE')")
     @RequestMapping("/delete/{id}")
     public void delete(@PathVariable("id") Integer id) {
         clientRepository.delete(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('CLIENT_READ')")
+    @PreAuthorize("hasAuthority('CLIENT_READ')")
     @RequestMapping(name = "/get")
     public List<ClientEntity> get() {
         return clientRepository.findAll();
     }
 
-    @PreAuthorize("hasAnyAuthority('CLIENT_READ')")
+    @PreAuthorize("hasAuthority('CLIENT_READ')")
     @RequestMapping("/get/{id}")
     public void get(@PathVariable("id") Integer id) {
         clientRepository.findOne(id);

@@ -14,7 +14,7 @@ public class CardRest {
         this.cardNumberGenerator = cardNumberGenerator;
     }
 
-    @PreAuthorize("hasAnyAuthority('CARD_WRITE')")
+    @PreAuthorize("hasAuthority('CARD_WRITE')")
     @RequestMapping("/create")
     public String create() {
         return cardNumberGenerator.generate();

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
@@ -21,35 +22,33 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Value("${security.oauth2.client.accessTokenUri}")
     private String accessTokenUri;
 
+    @Bean(name = "OAuth2CardService")
+    @LoadBalanced
+    public OAuth2RestTemplate oAuth2CardService() {
+        ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+        resource.setAccessTokenUri(accessTokenUri);
+        resource.setClientId("client");
+        resource.setClientSecret("secret");
+        resource.setUsername("card");
+        resource.setPassword("card");
+        DefaultAccessTokenRequest accessTokenRequest = new DefaultAccessTokenRequest();
+        OAuth2ClientContext context = new DefaultOAuth2ClientContext(accessTokenRequest);
+        return new OAuth2RestTemplate(resource, context);
+    }
+
     @Primary
-    @Bean
+    @Bean(name = "OAuth2RestTemplate")
     @LoadBalanced
     public OAuth2RestTemplate oAuth2RestTemplate(OAuth2ProtectedResourceDetails details) {
         return new OAuth2RestTemplate(details);
     }
 
-    @Bean
-    @LoadBalanced
-    public OAuth2RestTemplate oAuth2CardService() {
-        ResourceOwnerPasswordResourceDetails details = new ResourceOwnerPasswordResourceDetails();
-        DefaultAccessTokenRequest tokenRequest = new DefaultAccessTokenRequest();
-        DefaultOAuth2ClientContext clientContext = new DefaultOAuth2ClientContext(tokenRequest);
-
-        details.setUsername("card");
-        details.setPassword("card");
-        details.setClientId("client");
-        details.setClientSecret("secret");
-        details.setAccessTokenUri(accessTokenUri);
-
-        return new OAuth2RestTemplate(details, clientContext);
-    }
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/test").hasAuthority("PROCESSING");
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/**").authenticated()
+            .antMatchers(HttpMethod.GET, "/test").hasAuthority("PROCESSING");
     }
 }
