@@ -1,6 +1,5 @@
 spring:
-  application:
-    name: HistoryService
-  cloud:
-    config:
+  application.name: HistoryService
+  cloud.config:
+      failFast: true
       uri: http://localhost:8600

@@ -13,11 +13,13 @@ import java.util.List;
 public class AccountRest {
     private final AccountDAO accountDAO;
     private final AccountRepository accountRepository;
+    private final RemoteEventPublisher remoteEventPublisher;
 
     @Autowired
-    public AccountRest(AccountDAO accountDAO, AccountRepository accountRepository) {
+    public AccountRest(AccountDAO accountDAO, AccountRepository accountRepository, RemoteEventPublisher remoteEventPublisher) {
         this.accountDAO = accountDAO;
         this.accountRepository = accountRepository;
+        this.remoteEventPublisher = remoteEventPublisher;
     }
 
     @RequestMapping("/create")
@@ -27,11 +29,13 @@ public class AccountRest {
 
     @RequestMapping("/fund/{id}")
     public boolean fund(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
+        remoteEventPublisher.publishEvent(new FundEvent("AccountService", "HistoryService", sum.abs()));
         return accountDAO.addBalance(id, sum.abs());
     }
 
     @RequestMapping("/checkout/{id}")
     public boolean checkout(@PathVariable("id") Integer id, @RequestParam("sum") BigDecimal sum) {
+        remoteEventPublisher.publishEvent(new WithdrawEvent("AccountService", "HistoryService", sum.abs().negate()));
         return accountDAO.addBalance(id, sum.abs().negate());
     }
 
